@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;1,700&family=Josefin+Sans:ital,wght@1,600&display=swap");
+header {
+  text-align: center;
+  font-family: "Josefin Sans", sans-serif;
+}
+.searchbar form {
+  display: flex;
+  padding: 10px 20px;
+  justify-content: center;
+}
+.searchbar form label {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 5px;
+  color: rgb(0, 85, 255);
+  border: 2px solid blue;
+  width: 80%;
+}
+.searchbar form button {
+  margin-left: 10px;
+}
+.searchbar form #upload_file {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+.default_chart .filter_buttons {
+  margin: 15px 10px;
+  text-align: center;
+}
+.default_chart .filter_buttons button {
+  margin: 10px;
+}

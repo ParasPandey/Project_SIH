@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import SideBar from "./Components/SideBar";
+import Container from "react-bootstrap/Container";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { DashBoard } from "./Components/DashBoard";
+import { About } from "./Components/About";
+import { News } from "./Components/News";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Container fluid className="app">
+        <div className="sidebar">
+          <SideBar />
+        </div>
+        <div className="visualize">
+          <Routes>
+            <Route exact path="/" element={<DashBoard />} />
+            <Route exact path="/about" element={<About />} />
+            <Route exact path="/news" element={<News />} />
+          </Routes>
+        </div>
+      </Container>
+    </Router>
   );
 }
 

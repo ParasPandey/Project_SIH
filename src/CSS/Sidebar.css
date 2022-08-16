@@ -1,0 +1,68 @@
+.sidebar_box {
+  background-color: #2d53da;
+  margin: 20px 5px 20px 5px;
+  border-radius: 8px;
+}
+.sidebar_box .logo {
+  padding: 10px 5px 5px 5px;
+  color: white;
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+}
+.sidebar_box .logo img {
+  height: 60px;
+  width: 60px;
+}
+.sidebar_box .sidebar_options ul {
+    padding: 5px;
+    padding-bottom: 0;
+}
+.sidebar_box .sidebar_options ul li {
+  list-style: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 10px;
+  padding: 10px;
+  padding-left: 40px;
+  color: white;
+  font-size: 17px;
+}
+.sidebar_box .sidebar_options ul li.current{
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+}
+.sidebar_box .sidebar_options ul li:hover {
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+}
+
+.sidebar_box .sidebar_options ul li span {
+  margin-left: 10px;
+}
+.sidebar_box .contact_info{
+  margin: 5px;
+  padding-bottom: 10px;
+}
+.sidebar_box .contact_info .information{
+  margin: 0px 15px;
+  padding: 15px;
+  color: white;
+  background-color: #3e65f2;
+  border-radius: 5px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+.sidebar_box .contact_info .information p{
+  margin: 5px;
+}
+.sidebar_box .contact_info .information button{
+  margin-top: 5px;
+  background-color: aqua;
+  font-weight: 600;
+}

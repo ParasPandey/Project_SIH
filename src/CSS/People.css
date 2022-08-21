@@ -1,0 +1,13 @@
+.people_card {
+  margin: 5px;
+  cursor: pointer;
+}
+.card_container {
+  display: flex;
+}
+.card_container.left_align {
+  justify-content: start;
+}
+.card_container.right_align {
+  justify-content: end;
+}

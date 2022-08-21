@@ -27,7 +27,31 @@ header {
 .default_chart .filter_buttons {
   margin: 15px 10px;
   text-align: center;
+  border: 2px solid whitesmoke;
+  padding: 5px;
+  border-radius: 2px;
+  box-shadow: 10px 10px 8px #888888;
 }
 .default_chart .filter_buttons button {
   margin: 10px;
+}
+.default_chart .date_picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  border: 2px solid whitesmoke;
+  padding: 10px;
+  border-radius: 2px;
+  box-shadow: 10px 10px 8px #888888;
+
+}
+.default_chart .date_picker .start_date,.default_chart .date_picker .end_date {
+  display: flex;
+  margin: 0 5px;
+}
+.default_chart .date_picker span{
+  margin: 0 5px;
+}.default_chart .date_picker .react-datepicker-wrapper {
+  margin: 0 5px;
 }

@@ -21,10 +21,14 @@ export const DashBoard = () => {
   let [inputFormet, setInputFormet] = useState("YYYY");
   let [activeBtn, setActiveBtn] = useState("Default");
   const [rangeStart, setRangeStart] = useState();
+  let [exponentionData, SetExponentionData] = useState([]);
+  let [machineLearning, SetMachineLearning] = useState([]);
 
   const [rangeEnd, setRangeEnd] = useState();
   useEffect(() => {
     ConvertFileToJson(inputFileData, setInputData, setFileData);
+    SetExponentionData(exponential);
+    SetMachineLearning(mlData);
   }, []);
 
   const handleFileUpload = (e) => {
@@ -41,24 +45,42 @@ export const DashBoard = () => {
   const ApplyFilterOnInput = (data) => {
     if (data === " ") {
       setActiveBtn("Default");
+      SetExponentionData(exponential);
+      SetMachineLearning(mlData);
       setInputData(fileData);
-    } else {
+    }else {
       const dataArray = data.split("-");
+      console.log(dataArray)
       if (dataArray[1] === "D") {
         setInputData(
           fileData.slice(fileData.length - dataArray[0], fileData.length)
         );
+        SetExponentionData( exponential.slice(0, dataArray[0]));
+        SetMachineLearning( mlData.slice(0, dataArray[0]));
         setInputFormet("DD-MM-YYYY");
         setActiveBtn("5 Days");
       } else if (dataArray[1] === "M") {
         setInputData(
           fileData.slice(fileData.length - 30 * dataArray[0], fileData.length)
         );
+        SetExponentionData(
+          exponential.slice(0, 30 * dataArray[0])
+        );
+        SetMachineLearning(
+          mlData.slice(0, 30 * dataArray[0])
+        );
         setInputFormet("DD-MM-YYYY");
         setActiveBtn(`${dataArray[0]} Month`);
       } else if (dataArray[1] === "Y") {
         setInputData(
           fileData.slice(fileData.length - 365 * dataArray[0], fileData.length)
+        );
+        console.log(dataArray[0])
+        SetExponentionData(
+          exponential.slice(0, 365 * dataArray[0])
+        );
+        SetMachineLearning(
+          mlData.slice(0, 365 * dataArray[0])
         );
         setInputFormet("MM-YYYY");
         setActiveBtn(`${dataArray[0]} Year`);
@@ -137,7 +159,8 @@ export const DashBoard = () => {
                   variant="contained"
                   color="primary"
                   type="submit"
-                  onClick={ApplyDateFilter}>
+                  onClick={ApplyDateFilter}
+                >
                   Apply
                 </Button>
               </div>
@@ -148,12 +171,12 @@ export const DashBoard = () => {
               <LineChart data={inputData} inputFormet={inputFormet} />
 
               <MyAreaChart
-                data={exponential}
+                data={exponentionData}
                 inputFormet={inputFormet}
                 name="Exponential Smoothing"
               />
               <MyAreaChart
-                data={mlData}
+                data={machineLearning}
                 inputFormet={inputFormet}
                 name="Machine Learning"
               />

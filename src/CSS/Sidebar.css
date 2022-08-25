@@ -15,8 +15,8 @@
   width: 60px;
 }
 .sidebar_box .sidebar_options ul {
-    padding: 5px;
-    padding-bottom: 0;
+  padding: 5px;
+  padding-bottom: 0;
 }
 .sidebar_box .sidebar_options ul li {
   list-style: none;
@@ -28,7 +28,7 @@
   color: white;
   font-size: 17px;
 }
-.sidebar_box .sidebar_options ul li.current{
+.sidebar_box .sidebar_options ul li.current {
   background-color: white;
   border-radius: 5px;
   color: black;
@@ -42,11 +42,11 @@
 .sidebar_box .sidebar_options ul li span {
   margin-left: 10px;
 }
-.sidebar_box .contact_info{
+.sidebar_box .contact_info {
   margin: 5px;
   padding-bottom: 10px;
 }
-.sidebar_box .contact_info .information{
+.sidebar_box .contact_info .information {
   margin: 0px 15px;
   padding: 15px;
   color: white;
@@ -58,11 +58,14 @@
   /* justify-content: center; */
   /* align-items: center; */
 }
-.sidebar_box .contact_info .information p{
+.sidebar_box .contact_info .information p {
   margin: 5px;
 }
-.sidebar_box .contact_info .information button{
+.sidebar_box .contact_info .information button {
   margin-top: 5px;
   background-color: aqua;
   font-weight: 600;
+}
+.sidebar_box .contact_info .information a {
+  text-decoration: none;
 }

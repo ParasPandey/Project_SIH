@@ -3,10 +3,16 @@ import Button from "@material-ui/core/Button";
 import "./../CSS/Dashboard.css";
 import { ConvertFileToJson } from "../Helper/helper";
 import file from "../File/daily_csv.csv";
+import newFile from "../File/newngp.csv";
+import inputFileData from "../File/ngp_close.csv";
 import LineChart from "./LineChart";
 
 import "react-datepicker/dist/react-datepicker.css";
 import MyDatePicker from "./MyDatePicker";
+import mlData from "../File/ml";
+import exponential from "../File/exponential.json";
+import MyAreaChart from "./MyAreaChart";
+import FilterButtons from "./FilterButtons";
 
 export const DashBoard = () => {
   let [inputData, setInputData] = useState([]);
@@ -14,12 +20,11 @@ export const DashBoard = () => {
   let [inputfile, setInputFile] = useState();
   let [inputFormet, setInputFormet] = useState("YYYY");
   let [activeBtn, setActiveBtn] = useState("Default");
-
   const [rangeStart, setRangeStart] = useState();
 
   const [rangeEnd, setRangeEnd] = useState();
   useEffect(() => {
-    ConvertFileToJson(file, setInputData, setFileData);
+    ConvertFileToJson(inputFileData, setInputData, setFileData);
   }, []);
 
   const handleFileUpload = (e) => {
@@ -30,7 +35,7 @@ export const DashBoard = () => {
   };
   const Predict = (e) => {
     e.preventDefault();
-    ConvertFileToJson(inputfile, setInputData, setFileData);
+    ConvertFileToJson(newFile, setInputData, setFileData);
   };
 
   const ApplyFilterOnInput = (data) => {
@@ -63,11 +68,25 @@ export const DashBoard = () => {
 
   const ApplyDateFilter = () => {
     setActiveBtn(null);
-    let filterdArray = inputData.filter(
-      (d) =>
-        new Date(d.Date).getTime() >= new Date(rangeStart).getTime() &&
-        new Date(d.Date).getTime() <= new Date(rangeEnd).getTime()
-    );
+    let filterdArray = inputData.filter((d) => {
+<<<<<<< HEAD
+      d.Date = d.Date.split("-").reverse().join("-");
+=======
+      let day = d.Date.slice(0, 2);
+      // console.log(day);
+      let month = d.Date.slice(3, 5);
+      // console.log(month);
+      let year = d.Date.slice(6, 10);
+      // console.log(year);
+      let tempDate = year + "-" + month + "-" + day;
+>>>>>>> 9b96ee7700d3cdd6d9cfae6fc904146d24031ac6
+      return (
+        new Date(tempDate).getTime() >= new Date(rangeStart).getTime() &&
+        new Date(tempDate).getTime() <= new Date(rangeEnd).getTime()
+      );
+      console.log(filterdArray);
+    });
+    console.log(filterdArray);
     setInputData(filterdArray);
     setInputFormet("DD-MM-YYYY");
   };
@@ -129,14 +148,28 @@ export const DashBoard = () => {
                   variant="contained"
                   color="primary"
                   type="submit"
-                  onClick={ApplyDateFilter}
-                >
+                  onClick={ApplyDateFilter}>
                   Apply
                 </Button>
               </div>
+              <FilterButtons
+                activeBtn={activeBtn}
+                ApplyFilterOnInput={ApplyFilterOnInput}
+              />
               <LineChart data={inputData} inputFormet={inputFormet} />
-              
-              <div className="filter_buttons">
+
+              <MyAreaChart
+                data={exponential}
+                inputFormet={inputFormet}
+                name="Exponential Smoothing"
+              />
+              <MyAreaChart
+                data={mlData}
+                inputFormet={inputFormet}
+                name="Machine Learning"
+              />
+
+              {/* <div className="filter_buttons">
                 <button
                   type="button"
                   className={`btn btn${
@@ -158,7 +191,7 @@ export const DashBoard = () => {
                 <button
                   type="button"
                   className={`btn btn${
-                    activeBtn === "1 Year" ? "" : "-outline"
+                    activeBtn === "3 Month" ? "" : "-outline"
                   }-primary`}
                   onClick={() => ApplyFilterOnInput("3-M")}
                 >
@@ -177,7 +210,7 @@ export const DashBoard = () => {
                 <button
                   type="button"
                   className={`btn btn${
-                    activeBtn === "5 Year" ? "" : "-outline"
+                    activeBtn === "1 Year" ? "" : "-outline"
                   }-primary`}
                   onClick={() => ApplyFilterOnInput("1-Y")}
                 >
@@ -186,7 +219,7 @@ export const DashBoard = () => {
                 <button
                   type="button"
                   className={`btn btn${
-                    activeBtn === "10 Year" ? "" : "-outline"
+                    activeBtn === "5 Year" ? "" : "-outline"
                   }-primary`}
                   onClick={() => ApplyFilterOnInput("5-Y")}
                 >
@@ -201,7 +234,7 @@ export const DashBoard = () => {
                 >
                   All
                 </button>
-              </div>
+              </div> */}
             </>
           )}
         </div>

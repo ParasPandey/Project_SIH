@@ -39,8 +39,8 @@ const SideBar = () => {
         <div className="information">
           <p>Have any problems with anything?</p>
           <p>Try to contact with us!!</p>
-          <Button onClick={() => navigate("/contact")} variant="primary">
-            Contact Us
+          <Button variant="primary">
+            <a href="mailto:mohankrishnag514@gmail.com">Contact Us </a>
           </Button>
         </div>
       </div>

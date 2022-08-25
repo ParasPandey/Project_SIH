@@ -75,6 +75,7 @@ export const DashBoard = () => {
         setInputData(
           fileData.slice(fileData.length - 365 * dataArray[0], fileData.length)
         );
+        console.log(dataArray[0])
         SetExponentionData(
           exponential.slice(0, 365 * dataArray[0])
         );

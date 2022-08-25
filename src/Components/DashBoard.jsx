@@ -3,6 +3,7 @@ import Button from "@material-ui/core/Button";
 import "./../CSS/Dashboard.css";
 import { ConvertFileToJson } from "../Helper/helper";
 import file from "../File/daily_csv.csv";
+import newFile from "../File/newngp.csv";
 import inputFileData from "../File/ngp_close.csv";
 import LineChart from "./LineChart";
 
@@ -34,7 +35,7 @@ export const DashBoard = () => {
   };
   const Predict = (e) => {
     e.preventDefault();
-    ConvertFileToJson(inputfile, setInputData, setFileData);
+    ConvertFileToJson(newFile, setInputData, setFileData);
   };
 
   const ApplyFilterOnInput = (data) => {
@@ -67,12 +68,8 @@ export const DashBoard = () => {
 
   const ApplyDateFilter = () => {
     setActiveBtn(null);
-    // console.log(rangeStart, rangeEnd);
-    // console.log(inputData)
     let filterdArray = inputData.filter((d) => {
-      let tempDate = new Date(d.Date);
-      tempDate = tempDate.getTime();
-      console.log(tempDate, d.Date);
+      d.Date = d.Date.split("-").reverse().join("-");
       return (
         new Date(d.Date).getTime() >= new Date(rangeStart).getTime() &&
         new Date(d.Date).getTime() <= new Date(rangeEnd).getTime()
@@ -145,11 +142,12 @@ export const DashBoard = () => {
                   Apply
                 </Button>
               </div>
-              <LineChart data={inputData} inputFormet={inputFormet} />
               <FilterButtons
                 activeBtn={activeBtn}
                 ApplyFilterOnInput={ApplyFilterOnInput}
               />
+              <LineChart data={inputData} inputFormet={inputFormet} />
+
               <MyAreaChart
                 data={exponential}
                 inputFormet={inputFormet}

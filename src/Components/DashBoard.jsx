@@ -13,6 +13,7 @@ import mlData from "../File/ml";
 import exponential from "../File/exponential.json";
 import MyAreaChart from "./MyAreaChart";
 import FilterButtons from "./FilterButtons";
+import axios from "axios";
 
 export const DashBoard = () => {
   let [inputData, setInputData] = useState([]);
@@ -21,11 +22,27 @@ export const DashBoard = () => {
   let [inputFormet, setInputFormet] = useState("YYYY");
   let [activeBtn, setActiveBtn] = useState("Default");
   const [rangeStart, setRangeStart] = useState();
+  const [presentData, setPresentData] = useState();
 
   const [rangeEnd, setRangeEnd] = useState();
   useEffect(() => {
-    ConvertFileToJson(inputFileData, setInputData, setFileData);
+    // ConvertFileToJson(inputFileData, setInputData, setFileData);
+    fetchPresentData();
   }, []);
+
+  useEffect(() => {
+    if (presentData?.data.length > 0) {
+      ConvertFileToJson(presentData, setInputData, setFileData);
+    }
+  }, [presentData]);
+
+  const fetchPresentData = async () => {
+    try {
+      const data = await axios.get("/getPresentPriceData");
+      console.log(data);
+      setPresentData(data);
+    } catch (error) {}
+  };
 
   const handleFileUpload = (e) => {
     if (e.target.files) {

@@ -52,11 +52,11 @@ const FilterButtons = ({activeBtn,ApplyFilterOnInput}) => {
     <button
       type="button"
       className={`btn btn${
-        activeBtn === "5 Year" ? "" : "-outline"
+        activeBtn === "2 Year" ? "" : "-outline"
       }-primary`}
-      onClick={() => ApplyFilterOnInput("5-Y")}
+      onClick={() => ApplyFilterOnInput("2-Y")}
     >
-      5 Year
+      2 Year
     </button>
     <button
       type="button"

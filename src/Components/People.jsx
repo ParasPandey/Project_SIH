@@ -1,10 +1,8 @@
 import React from "react";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import "./../CSS/People.css";
-import { Avatar, CardHeader } from "@material-ui/core";
 import { Box, CardMedia } from "@mui/material";
 
 const People = ({ data, index }) => {

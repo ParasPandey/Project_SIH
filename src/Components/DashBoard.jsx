@@ -4,9 +4,9 @@ import "./../CSS/Dashboard.css";
 import { ConvertFileToJson } from "../Helper/helper";
 import file from "../File/daily_csv.csv";
 import LineChart from "./LineChart";
-import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
+import MyDatePicker from "./MyDatePicker";
 
 export const DashBoard = () => {
   let [inputData, setInputData] = useState([]);
@@ -18,7 +18,6 @@ export const DashBoard = () => {
   const [rangeStart, setRangeStart] = useState();
 
   const [rangeEnd, setRangeEnd] = useState();
-
   useEffect(() => {
     ConvertFileToJson(file, setInputData, setFileData);
   }, []);
@@ -63,6 +62,7 @@ export const DashBoard = () => {
   };
 
   const ApplyDateFilter = () => {
+    setActiveBtn(null);
     let filterdArray = inputData.filter(
       (d) =>
         new Date(d.Date).getTime() >= new Date(rangeStart).getTime() &&
@@ -70,14 +70,6 @@ export const DashBoard = () => {
     );
     setInputData(filterdArray);
     setInputFormet("DD-MM-YYYY");
-  };
-
-  const selectStartDate = (d) => {
-    setRangeStart(d);
-  };
-
-  const selectEndDate = (d) => {
-    setRangeEnd(d);
   };
 
   return (
@@ -109,22 +101,28 @@ export const DashBoard = () => {
               <div className="date_picker">
                 <div className="start_date">
                   <span>FROM </span> :{"       "}
-                  <DatePicker
-                    selectsStart
+                  <MyDatePicker
+                    selectsStart={true}
+                    selectsEnd={false}
+                    rangeStart={rangeStart}
+                    rangeEnd={rangeEnd}
+                    setRange={setRangeStart}
                     selected={rangeStart}
-                    startDate={rangeStart}
-                    endDate={rangeEnd}
-                    onChange={selectStartDate}
+                    minDate={new Date("01-07-1997")}
+                    maxDate={new Date()}
                   />
                 </div>
                 <div className="end_date">
                   <span>TO </span> :{"       "}
-                  <DatePicker
-                    selectsEnd
+                  <MyDatePicker
+                    selectsStart={false}
+                    selectsEnd={true}
+                    rangeStart={rangeStart}
+                    rangeEnd={rangeEnd}
+                    setRange={setRangeEnd}
                     selected={rangeEnd}
-                    startDate={rangeStart}
-                    endDate={rangeEnd}
-                    onChange={selectEndDate}
+                    minDate={new Date(rangeStart)}
+                    maxDate={new Date()}
                   />
                 </div>
                 <Button
@@ -137,16 +135,8 @@ export const DashBoard = () => {
                 </Button>
               </div>
               <LineChart data={inputData} inputFormet={inputFormet} />
+              
               <div className="filter_buttons">
-                <button
-                  type="button"
-                  className={`btn btn${
-                    activeBtn === "Default" ? "" : "-outline"
-                  }-primary`}
-                  onClick={() => ApplyFilterOnInput(" ")}
-                >
-                  Default
-                </button>
                 <button
                   type="button"
                   className={`btn btn${
@@ -168,16 +158,26 @@ export const DashBoard = () => {
                 <button
                   type="button"
                   className={`btn btn${
+                    activeBtn === "1 Year" ? "" : "-outline"
+                  }-primary`}
+                  onClick={() => ApplyFilterOnInput("3-M")}
+                >
+                  3 Month
+                </button>
+                <button
+                  type="button"
+                  className={`btn btn${
                     activeBtn === "6 Month" ? "" : "-outline"
                   }-primary`}
                   onClick={() => ApplyFilterOnInput("6-M")}
                 >
                   6 Month
                 </button>
+
                 <button
                   type="button"
                   className={`btn btn${
-                    activeBtn === "1 Year" ? "" : "-outline"
+                    activeBtn === "5 Year" ? "" : "-outline"
                   }-primary`}
                   onClick={() => ApplyFilterOnInput("1-Y")}
                 >
@@ -186,7 +186,7 @@ export const DashBoard = () => {
                 <button
                   type="button"
                   className={`btn btn${
-                    activeBtn === "5 Year" ? "" : "-outline"
+                    activeBtn === "10 Year" ? "" : "-outline"
                   }-primary`}
                   onClick={() => ApplyFilterOnInput("5-Y")}
                 >
@@ -195,11 +195,11 @@ export const DashBoard = () => {
                 <button
                   type="button"
                   className={`btn btn${
-                    activeBtn === "10 Year" ? "" : "-outline"
+                    activeBtn === "Default" ? "" : "-outline"
                   }-primary`}
-                  onClick={() => ApplyFilterOnInput("10-Y")}
+                  onClick={() => ApplyFilterOnInput(" ")}
                 >
-                  10 Year
+                  All
                 </button>
               </div>
             </>

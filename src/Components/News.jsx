@@ -11,7 +11,7 @@ import { Pagination } from "@mui/material";
 export const News = () => {
   let [news, setNews] = useState([]);
   let [page, setPage] = useState(1);
-  const APIKEY = "v6XT4C4CQlETbtXuYexSDwQOwgxEXrUplR_t3h81F9k";
+  const APIKEY = "fFJU8TBISACx095MYTcJqJq5_sfgkqCI3gMv9T_fvF4";
   useEffect(() => {
     const getData = async () => {
       let config = {

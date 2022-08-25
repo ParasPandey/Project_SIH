@@ -67,16 +67,19 @@ export const DashBoard = () => {
 
   const ApplyDateFilter = () => {
     setActiveBtn(null);
-    // console.log(rangeStart, rangeEnd);
-    // console.log(inputData)
     let filterdArray = inputData.filter((d) => {
-      let tempDate = new Date(d.Date);
-      tempDate = tempDate.getTime();
-      console.log(tempDate, d.Date);
+      let day = d.Date.slice(0, 2);
+      // console.log(day);
+      let month = d.Date.slice(3, 5);
+      // console.log(month);
+      let year = d.Date.slice(6, 10);
+      // console.log(year);
+      let tempDate = year + "-" + month + "-" + day;
       return (
-        new Date(d.Date).getTime() >= new Date(rangeStart).getTime() &&
-        new Date(d.Date).getTime() <= new Date(rangeEnd).getTime()
+        new Date(tempDate).getTime() >= new Date(rangeStart).getTime() &&
+        new Date(tempDate).getTime() <= new Date(rangeEnd).getTime()
       );
+      console.log(filterdArray);
     });
     console.log(filterdArray);
     setInputData(filterdArray);
@@ -140,8 +143,7 @@ export const DashBoard = () => {
                   variant="contained"
                   color="primary"
                   type="submit"
-                  onClick={ApplyDateFilter}
-                >
+                  onClick={ApplyDateFilter}>
                   Apply
                 </Button>
               </div>

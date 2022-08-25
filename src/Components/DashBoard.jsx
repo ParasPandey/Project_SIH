@@ -69,22 +69,11 @@ export const DashBoard = () => {
   const ApplyDateFilter = () => {
     setActiveBtn(null);
     let filterdArray = inputData.filter((d) => {
-<<<<<<< HEAD
       d.Date = d.Date.split("-").reverse().join("-");
-=======
-      let day = d.Date.slice(0, 2);
-      // console.log(day);
-      let month = d.Date.slice(3, 5);
-      // console.log(month);
-      let year = d.Date.slice(6, 10);
-      // console.log(year);
-      let tempDate = year + "-" + month + "-" + day;
->>>>>>> 9b96ee7700d3cdd6d9cfae6fc904146d24031ac6
       return (
-        new Date(tempDate).getTime() >= new Date(rangeStart).getTime() &&
-        new Date(tempDate).getTime() <= new Date(rangeEnd).getTime()
+        new Date(d.Data).getTime() >= new Date(rangeStart).getTime() &&
+        new Date(d.Data).getTime() <= new Date(rangeEnd).getTime()
       );
-      console.log(filterdArray);
     });
     console.log(filterdArray);
     setInputData(filterdArray);

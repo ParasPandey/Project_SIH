@@ -93,8 +93,8 @@ export const DashBoard = () => {
     let filterdArray = inputData.filter((d) => {
       d.Date = d.Date.split("-").reverse().join("-");
       return (
-        new Date(d.Data).getTime() >= new Date(rangeStart).getTime() &&
-        new Date(d.Data).getTime() <= new Date(rangeEnd).getTime()
+        new Date(d.Date).getTime() >= new Date(rangeStart).getTime() &&
+        new Date(d.Date).getTime() <= new Date(rangeEnd).getTime()
       );
     });
     console.log(filterdArray);

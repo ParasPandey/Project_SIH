@@ -18,7 +18,7 @@ export const About = () => {
       pic: Manan,
       name: "Manan Mehrotra",
       about:
-        "I am Manan Mehrotra, born and brought up in Moradabad.I scored 65% in High School and 80% in junior college. I am currently in the final year of the Moradabad Institute of Science and Technology. I believe that success comes to those who are determined enough. The right kind of attitude with hard work and determination is required for a balanced life and to achieve greater heights in life.",
+        "I am Manan Mehrotra, born and brought up in Moradabad.I know python as a progamming language.  I am currently in the final year of the Moradabad Institute of Science and Technology. I believe that success comes to those who are determined enough. The right kind of attitude with hard work and determination is required for a balanced life and to achieve greater heights in life. I am beginner in data science and data analytics.",
     },
     {
       pic: Mohan,
@@ -57,7 +57,7 @@ export const About = () => {
       pic: Aishwarya,
       name: "Aishwarya Gupta",
       about:
-        "Aishwarya is an RPA Developer. She has 3+ years of IT experience and has diversified knowledge of many technical domains with excellent management and leadership skills. Also she is SIH alumni of 2018.",
+        "Aishwarya Gupta here,experienced programmer with several successful projects under my belt. I’d say my portfolio introduces me better than my words do, so if want we can look at it together, and I can tell you about the principal projects I engineered over the years. I’ve worked with the top Indian MNCs in my 3 years of experience, climbing the career ladder, learning the ins and outs of programming.Currently Working for another renowned IT company on the position of Senior RPA developer.",
     },
     {
       pic: Monika,

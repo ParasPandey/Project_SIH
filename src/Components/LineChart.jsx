@@ -19,73 +19,9 @@ import numeral from "numeral";
 const LineChart = ({ data, inputFormet }) => {
   const dateFormatter = (item) => moment(item).format(inputFormet);
   const currencyFormatter = (item) => numeral(item).format("$0,0");
-  const rangeData = [
-    {
-      day: "05-01",
-      temperature: [-1, 10, 20],
-    },
-    {
-      day: "05-02",
-      temperature: [2, 15, 22],
-    },
-    {
-      day: "05-03",
-      temperature: [3, 12, 18],
-    },
-    {
-      day: "05-04",
-      temperature: [4, 12, 17],
-    },
-    {
-      day: "05-05",
-      temperature: [12, 16, 22],
-    },
-    {
-      day: "05-06",
-      temperature: [5, 16, 24],
-    },
-    {
-      day: "05-07",
-      temperature: [3, 12, 20],
-    },
-    {
-      day: "05-08",
-      temperature: [0, 8, 14],
-    },
-    {
-      day: "05-09",
-      temperature: [-3, 5, 10],
-    },
-  ];
-  const data1 = [
-    {
-      name: "Page A",
-      actual: 5,
-      temperature : [2,8]
-    },
-    {
-      name: "Page B",
-      actual: 6,
-      temperature : [3,10]
-    },
-    {
-      name: "Page C",
-      actual: 9,
-      temperature : [1,14]
-    },
-    {
-      name: "Page D",
-      actual: 6,
-      temperature : [4,10]
-    },
-    {
-      name: "Page E",
-      actual: 7,
-      temperature : [3,13]
-    },
-  ];
   return (
     <>
+    <h4 className="m-3 mt-5">Natural Gas Price</h4>
       <Resizable>
         <AreaChart
           width={730}
@@ -104,7 +40,7 @@ const LineChart = ({ data, inputFormet }) => {
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="Date" tickFormatter={dateFormatter} fontSize={12}>
+          <XAxis dataKey="Date"  fontSize={12}>
             <Label value="Date" offset={0} position="bottom" />
           </XAxis>
           <YAxis
@@ -119,12 +55,6 @@ const LineChart = ({ data, inputFormet }) => {
           />
           <Tooltip />
 
-          {/* <ReferenceLine
-                    y={18}
-                    label="Max"
-                    stroke="red"
-                    strokeDasharray="3 3"
-                  /> */}
           <Legend verticalAlign="top" height={36} />
           <Area
             type="monotone"
@@ -134,27 +64,6 @@ const LineChart = ({ data, inputFormet }) => {
             fill="url(#colorUv)"
           />
         </AreaChart>
-      </Resizable>
-      <Resizable>
-        <ComposedChart
-          width={500}
-          height={400}
-          data={data1}
-          margin={{
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20,
-          }}
-        >
-          <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Area dataKey="temperature" stroke="#8884d8" fill="#8884d8" />
-          <Line type="monotone" dataKey="actual" stroke="#ff7300" />
-        </ComposedChart>
       </Resizable>
     </>
   );

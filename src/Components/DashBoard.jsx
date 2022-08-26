@@ -75,7 +75,7 @@ export const DashBoard = () => {
     FindMax(exponential, setExpoMax);
     FindMax(DLData, setDLMax);
     FindMax(Arima, setArimaMax);
-    setEsembleData(Esemble.slice(1,Esemble.length))
+    setEsembleData(Esemble.slice(1, Esemble.length));
   }, []);
 
   const handleFileUpload = (e) => {
@@ -87,7 +87,7 @@ export const DashBoard = () => {
   };
   const Predict = (e) => {
     e.preventDefault();
-    let json = UpdateJson(csvData, DLData);
+    let json = UpdateJson(csvData, Esemble.slice(1,Esemble.length));
     console.log(json);
   };
 
@@ -254,6 +254,7 @@ export const DashBoard = () => {
                 activeBtn={activeBtn}
                 ApplyFilterOnInput={ApplyFilterOnInput}
               />
+
               <MyAreaChart
                 data={machineLearning}
                 inputFormet={inputFormet}
@@ -276,9 +277,8 @@ export const DashBoard = () => {
                 max={arimaMax}
                 value={1}
               />
-
               <MyAreaChart
-                data={Esemble.slice(1,Esemble.length)}
+                data={Esemble.slice(1, Esemble.length)}
                 inputFormet={inputFormet}
                 name="Ensemble"
                 max={Esemble[0].max}

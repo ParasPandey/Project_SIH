@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import "./../CSS/Dashboard.css";
-import {
-  ConvertFileToJson,
-  UpdateJson,
-} from "../Helper/helper";
-import newFile from "../File/newngp.csv";
+import { ConvertFileToJson, UpdateJson } from "../Helper/helper";
 import inputFileData from "../File/ngp_close.csv";
 import LineChart from "./LineChart";
 import MyAreaChart from "./MyAreaChart";
@@ -21,7 +17,6 @@ import DLData180 from "../File/DL/dl180.json";
 import DLData365 from "../File/DL/dl365.json";
 import DLData730 from "../File/DL/dl730.json";
 import MyDatePicker from "./MyDatePicker";
-
 
 // Exponential all files
 import exponential from "../File/EX/es_all.json";
@@ -52,21 +47,29 @@ export const DashBoard = () => {
   const [machineLearning, SetMachineLearning] = useState([]);
   const [arimaData, SetArimaData] = useState([]);
   let [csvData, setCsvData] = useState([]);
-  let [dlMax, setDLMax] = useState(null);
-  let [expoMax, setExpoMax] = useState(null);
-  let [arimaMax, setArimaMax] = useState(null);
-
+  let [dlMax, setDLMax] = useState(0);
+  let [expoMax, setExpoMax] = useState(0);
+  let [arimaMax, setArimaMax] = useState(0);
 
   const [rangeEnd, setRangeEnd] = useState();
-  // console.log(exponentionData);
-  // console.log(machineLearning);
-  // console.log(arimaData);
+  const FindMax = (data, update) => {
+    let max = 0;
+    data.forEach((d) => {
+      if(Number(d.actual) > Number(max)){
+        max=Number(d.actual)
+      }
+    });
+    max=Math.ceil(max)
+    update(max);
+  };
   useEffect(() => {
     ConvertFileToJson(inputFileData, setInputData, setFileData);
     SetExponentionData(exponential);
     SetMachineLearning(DLData);
     SetArimaData(Arima);
-    
+    FindMax(exponential, setExpoMax);
+    FindMax(DLData, setDLMax);
+    FindMax(Arima, setArimaMax);
   }, []);
 
   const handleFileUpload = (e) => {
@@ -79,7 +82,7 @@ export const DashBoard = () => {
   const Predict = (e) => {
     e.preventDefault();
     let json = UpdateJson(csvData, DLData);
-    console.log(json)
+    console.log(json);
   };
 
   const ApplyFilterOnInput = (data) => {
@@ -89,6 +92,9 @@ export const DashBoard = () => {
       SetMachineLearning(DLData);
       setInputData(fileData);
       SetArimaData(Arima);
+      FindMax(exponential, setExpoMax);
+      FindMax(DLData, setDLMax);
+      FindMax(Arima, setArimaMax);
     } else {
       const dataArray = data.split("-");
       if (dataArray[1] === "D") {
@@ -100,6 +106,9 @@ export const DashBoard = () => {
         SetArimaData(Arima5);
         setInputFormet("DD-MM-YYYY");
         setActiveBtn("5 Days");
+        FindMax(DLData5, setExpoMax);
+        FindMax(DLData5, setDLMax);
+        FindMax(Arima5, setArimaMax);
       } else if (dataArray[1] === "M") {
         setInputData(
           fileData.slice(fileData.length - 30 * dataArray[0], fileData.length)
@@ -110,33 +119,47 @@ export const DashBoard = () => {
           SetMachineLearning(DLData30);
           SetExponentionData(exponential30);
           SetArimaData(Arima30);
+          FindMax(DLData30, setExpoMax);
+          FindMax(DLData30, setDLMax);
+          FindMax(Arima30, setArimaMax);
         } else if (dataArray[0] === "3") {
           SetMachineLearning(DLData90);
           SetExponentionData(exponential90);
           SetArimaData(Arima90);
+          FindMax(exponential90, setExpoMax);
+          FindMax(DLData90, setDLMax);
+          FindMax(Arima90, setArimaMax);
         } else if (dataArray[0] === "6") {
           SetMachineLearning(DLData180);
           SetExponentionData(exponential180);
           SetArimaData(Arima180);
+          FindMax(exponential180, setExpoMax);
+          FindMax(DLData180, setDLMax);
+          FindMax(Arima180, setArimaMax);
         }
       } else if (dataArray[1] === "Y") {
         setInputData(
           fileData.slice(fileData.length - 365 * dataArray[0], fileData.length)
         );
-        console.log(dataArray[0]);
-        
 
-        
         setInputFormet("MM-YYYY");
         setActiveBtn(`${dataArray[0]} Year`);
         if (dataArray[0] === "1") {
           SetMachineLearning(DLData365);
           SetExponentionData(exponential365);
           SetArimaData(Arima365);
+          FindMax(exponential365, setExpoMax);
+          FindMax(DLData365, setDLMax);
+          FindMax(Arima365, setArimaMax);
         } else if (dataArray[0] === "2") {
+          // FindMax(exponential730, setExpoMax);
+          console.log(exponential730[0].max)
+          setExpoMax(Math.floor(exponential730[0].max))
           SetMachineLearning(DLData730);
-          SetExponentionData(exponential730);
+          SetExponentionData(exponential730.slice(1,exponential730.length));
           SetArimaData(Arima730);
+          FindMax(DLData730, setDLMax);
+          FindMax(Arima730, setArimaMax);
         }
       }
     }
@@ -155,42 +178,8 @@ export const DashBoard = () => {
     });
     console.log(filterdInputArray);
     setInputData(filterdInputArray);
-
-    // // For Exponention Prediction
-    // let filterdExponentionArray = exponentionData.filter((d) => {
-    //   console.log(d);
-    //   // d.Date = d.Date.split("-").reverse().join("-");
-    //   return (
-    //     new Date(d.date).getTime() >= new Date(rangeStart).getTime() &&
-    //     new Date(d.date).getTime() <= new Date(rangeEnd).getTime()
-    //   );
-    // });
-    // SetExponentionData(filterdExponentionArray);
-
-    // // For ML Prediction
-    // let filterdMlArray = DLData.filter((d) => {
-    //   // console.log(d)
-    //   // d.Date = d.date.split("-").reverse().join("-");
-    //   return (
-    //     new Date(d.date).getTime() >= new Date(rangeStart).getTime() &&
-    //     new Date(d.date).getTime() <= new Date(rangeEnd).getTime()
-    //   );
-    // });
-    // SetMachineLearning(filterdMlArray);
-
-    // // For Arima Prediction
-    // let filterdArimaArray = arimaData.filter((d) => {
-    //   // console.log(d)
-    //   // d.Date = d.date.split("-").reverse().join("-");
-    //   return (
-    //     new Date(d.date).getTime() >= new Date(rangeStart).getTime() &&
-    //     new Date(d.date).getTime() <= new Date(rangeEnd).getTime()
-    //   );
-    // });
-    // SetArimaData(filterdArimaArray);
     setInputFormet("DD-MM-YYYY");
   };
-
   return (
     <>
       <header className="header">
@@ -253,7 +242,7 @@ export const DashBoard = () => {
                   Apply
                 </Button>
               </div>
-              
+
               <LineChart data={inputData} inputFormet={inputFormet} />
               <FilterButtons
                 activeBtn={activeBtn}
@@ -263,36 +252,24 @@ export const DashBoard = () => {
                 data={machineLearning}
                 inputFormet={inputFormet}
                 name="Deep Learning"
-                offset={1.5}
+                max={dlMax}
+                value={2}
               />
               <MyAreaChart
                 data={exponentionData}
                 inputFormet={inputFormet}
                 name="Exponential Smoothing"
-                offset={3}
+                max={expoMax}
+                value={3}
               />
 
               <MyAreaChart
                 data={arimaData}
                 inputFormet={inputFormet}
                 name="Arima"
-                offset={1.2}
+                max={arimaMax}
+                value={1}
               />
-              {/* <h4>Collectione of Three</h4> */}
-              {/* <LineChart
-                width={730}
-                height={250}
-                data={data}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-                <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-              </LineChart> */}
             </>
           )}
         </div>

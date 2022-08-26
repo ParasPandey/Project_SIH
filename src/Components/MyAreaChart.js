@@ -6,8 +6,6 @@ import {
   Tooltip,
   Legend,
   Label,
-  AreaChart,
-  ReferenceLine,
   Area,
   Line,
   ComposedChart,
@@ -16,7 +14,7 @@ import { Resizable } from "react-timeseries-charts";
 import moment from "moment";
 import numeral from "numeral";
 
-const MyAreaChart = ({ data, inputFormet, name,offset }) => {
+const MyAreaChart = ({ data, inputFormet, name,max ,value}) => {
   data.map((d)=>{
     d.actual = Number(d?.actual)?.toFixed(2);
     d['Confidence Interval'][0] = Number(d['Confidence Interval'][0])?.toFixed(2)
@@ -47,8 +45,8 @@ const MyAreaChart = ({ data, inputFormet, name,offset }) => {
           <YAxis
             tickFormatter={currencyFormatter}
             fontSize={12}
-            domain={[dataMin => (0), dataMax => (dataMax * offset)]}
-            // domain={[0, max + 5]} 
+            // domain={[dataMin => (0), dataMax => (dataMax * offset)]}
+            domain={[0, max + value]} 
             label={{
               value: "Price",
               angle: -90,

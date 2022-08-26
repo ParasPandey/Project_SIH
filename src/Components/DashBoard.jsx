@@ -3,6 +3,7 @@ import Button from "@material-ui/core/Button";
 import "./../CSS/Dashboard.css";
 import {
   ConvertFileToJson,
+  ConvertFileToJsonPredict,
   FillCSVEmptyValues,
   UpdateJson,
 } from "../Helper/helper";
@@ -20,7 +21,7 @@ import DLData180 from "../File/DL/dl180.json";
 import DLData365 from "../File/DL/dl365.json";
 import DLData730 from "../File/DL/dl730.json";
 import MyDatePicker from "./MyDatePicker";
-import exponential from "../File/Exponential.json";
+import exponential from "../File/exponential.json";
 import Arima from "../File/ARIMA.json";
 import MyAreaChart from "./MyAreaChart";
 import FilterButtons from "./FilterButtons";
@@ -69,13 +70,17 @@ export const DashBoard = () => {
     if (e.target.files) {
       console.log(e.target.files[0]);
       setInputFile(e.target.files[0]);
-      ConvertFileToJson(e.target.files[0], setCsvData, null);
+      ConvertFileToJsonPredict(e.target.files[0], setCsvData, null);
     }
   };
-  const Predict = (e) => {
+  const Predict = async (e) => {
     e.preventDefault();
     let json = UpdateJson(csvData, DLData);
-    console.log(json);
+    const response = await axios.post("excel/download", { json });
+    if (response.data) {
+      window.open(`http://localhost:5000/excel/download/${response.data}`);
+      window.location.reload();
+    }
   };
 
   const ApplyFilterOnInput = (data) => {

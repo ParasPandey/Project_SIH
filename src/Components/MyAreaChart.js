@@ -16,8 +16,7 @@ import { Resizable } from "react-timeseries-charts";
 import moment from "moment";
 import numeral from "numeral";
 
-const MyAreaChart = ({ data, inputFormet, name }) => {
-  console.log(data)
+const MyAreaChart = ({ data, inputFormet, name,offset }) => {
   data.map((d)=>{
     d.actual = Number(d?.actual)?.toFixed(2);
     d['Confidence Interval'][0] = Number(d['Confidence Interval'][0])?.toFixed(2)
@@ -48,8 +47,8 @@ const MyAreaChart = ({ data, inputFormet, name }) => {
           <YAxis
             tickFormatter={currencyFormatter}
             fontSize={12}
-            domain={[dataMin => (0 - Math.abs(dataMin)), dataMax => (dataMax * 2)]} 
-            tick={{ fontSize: 14, width: 250 }}
+            domain={[dataMin => (0), dataMax => (dataMax * offset)]}
+            // domain={[0, max + 5]} 
             label={{
               value: "Price",
               angle: -90,

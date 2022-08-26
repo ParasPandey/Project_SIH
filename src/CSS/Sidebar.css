@@ -7,14 +7,14 @@
 }
 .sidebar_box .logo {
   padding: 10px 5px 5px 5px;
-  color: white;
+  color: rgb(195, 131, 206);
   font-weight: 600;
   font-size: 18px;
-  text-align: center;
+  /* text-align: center; */
 }
 .sidebar_box .logo img {
-  height: 60px;
-  width: 60px;
+  height: 40px;
+width: 40px;
 }
 .sidebar_box .sidebar_options ul {
   padding: 0px;

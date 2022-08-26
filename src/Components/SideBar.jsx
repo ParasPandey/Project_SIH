@@ -13,7 +13,7 @@ const SideBar = () => {
   return (
     <div className="sidebar_box">
       <div className="logo">
-        <img src={logo} alt="logo" /> Futurists.
+        <img src={logo} alt="logo" /> Futurists
       </div>
       <div className="sidebar_options">
         <ul>

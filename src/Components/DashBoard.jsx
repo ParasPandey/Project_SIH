@@ -58,6 +58,7 @@ export const DashBoard = () => {
   let [dlMax, setDLMax] = useState(0);
   let [expoMax, setExpoMax] = useState(0);
   let [arimaMax, setArimaMax] = useState(0);
+  const [isLoding, setIsLoding] = useState(false);
 
   const [rangeEnd, setRangeEnd] = useState();
   const FindMax = (data, update) => {
@@ -71,8 +72,8 @@ export const DashBoard = () => {
     update(max);
   };
   useEffect(() => {
-    // ConvertFileToJson(inputFileData, setInputData, setFileData);
-    fetchPresentData();
+    ConvertFileToJson(inputFileData, setInputData, setFileData);
+    // fetchPresentData();
     SetExponentionData(exponential);
     SetMachineLearning(DLData);
     SetArimaData(Arima);
@@ -81,33 +82,34 @@ export const DashBoard = () => {
     FindMax(Arima, setArimaMax);
   }, []);
 
-  useEffect(() => {
-    if (presentData?.data.length > 0) {
-      ConvertFileToJson(presentData, setInputData, setFileData);
-    }
-  }, [presentData]);
+  // useEffect(() => {
+  //   if (presentData?.data.length > 0) {
+  //     ConvertFileToJson(fileName, setInputData, setFileData);
+  //   }
+  // }, [presentData]);
 
-  const fetchPresentData = async () => {
-    try {
-      const data = await axios.get("/getPresentPriceData");
-      console.log(data);
-      setPresentData(data);
-    } catch (error) {}
-  };
+  // const fetchPresentData = async () => {
+  //   try {
+  //     const data = await axios.get("/getPresentPriceData");
+  //     console.log(data);
+  //     setPresentData(data);
+  //     setIsLoding(false);
+  //   } catch (error) {}
+  // };
 
-  useEffect(() => {
-    if (presentData?.data.length > 0) {
-      ConvertFileToJson(presentData, setInputData, setFileData);
-    }
-  }, [presentData]);
+  // useEffect(() => {
+  //   if (presentData?.data.length > 0) {
+  //     ConvertFileToJson(presentData, setInputData, setFileData);
+  //   }
+  // }, [presentData]);
 
-  const fetchPresentData = async () => {
-    try {
-      const data = await axios.get("/getPresentPriceData");
-      console.log(data);
-      setPresentData(data);
-    } catch (error) {}
-  };
+  // const fetchPresentData = async () => {
+  //   try {
+  //     const data = await axios.get("/getPresentPriceData");
+  //     console.log(data);
+  //     setPresentData(data);
+  //   } catch (error) {}
+  // };
 
   const handleFileUpload = (e) => {
     if (e.target.files) {
@@ -123,6 +125,8 @@ export const DashBoard = () => {
     if (response.data) {
       window.open(`http://localhost:5000/excel/download/${response.data}`);
       window.location.reload();
+    } else {
+      console.log("Some Error Occured");
     }
   };
 
@@ -212,6 +216,12 @@ export const DashBoard = () => {
     // For Natural Gas Price
     let filterdInputArray = inputData.filter((d) => {
       d.Date = d.Date.split("-").reverse().join("-");
+      console.log(
+        new Date(d.Date).getTime(),
+        d.Date,
+        rangeStart,
+        new Date(d.Date).getTime() >= d.Date
+      );
       return (
         new Date(d.Date).getTime() >= new Date(rangeStart).getTime() &&
         new Date(d.Date).getTime() <= new Date(rangeEnd).getTime()
@@ -223,97 +233,107 @@ export const DashBoard = () => {
   };
   return (
     <>
-      <header className="header">
-        <h2>Dashboard</h2>
-      </header>
-      <div className="searchbar">
-        <form onSubmit={Predict}>
-          <label htmlFor="upload_file">Import CSV File</label>
-          <input
-            type="file"
-            accept=".csv,.xlsx,.xls"
-            name="CSV_File"
-            id="upload_file"
-            onChange={handleFileUpload}
-          />
-          <Button variant="contained" color="primary" type="submit">
-            Predict
-          </Button>
-        </form>
-      </div>
+      {isLoding ? (
+        <>
+          <div className="text-center">
+            <h4 className="mt-5">Please wait your data is loading....</h4>
+          </div>
+        </>
+      ) : (
+        <>
+          <header className="header">
+            <h2 className="mb-4">Futurists</h2>
+          </header>
+          <div className="searchbar">
+            <form onSubmit={Predict}>
+              <label htmlFor="upload_file">Import CSV File</label>
+              <input
+                type="file"
+                accept=".csv,.xlsx,.xls"
+                name="CSV_File"
+                id="upload_file"
+                onChange={handleFileUpload}
+              />
+              <Button variant="contained" color="primary" type="submit">
+                Predict
+              </Button>
+            </form>
+          </div>
 
-      <div className="main_dash">
-        <div className="default_chart">
-          <h4 className="mt-4">Prediction Chart</h4>
-          {inputData?.length > 0 && (
-            <>
-              <div className="date_picker">
-                <div className="start_date">
-                  <span>From </span> :{"       "}
-                  <MyDatePicker
-                    selectsStart={true}
-                    selectsEnd={false}
-                    rangeStart={rangeStart}
-                    rangeEnd={rangeEnd}
-                    setRange={setRangeStart}
-                    selected={rangeStart}
-                    minDate={new Date("01-07-1997")}
-                    maxDate={new Date()}
+          <div className="main_dash">
+            <div className="default_chart">
+              <h4 className="mt-4">Prediction Chart</h4>
+              {inputData?.length > 0 && (
+                <>
+                  <div className="date_picker">
+                    <div className="start_date">
+                      <span>From </span> :{"       "}
+                      <MyDatePicker
+                        selectsStart={true}
+                        selectsEnd={false}
+                        rangeStart={rangeStart}
+                        rangeEnd={rangeEnd}
+                        setRange={setRangeStart}
+                        selected={rangeStart}
+                        minDate={new Date("01-07-1997")}
+                        maxDate={new Date()}
+                      />
+                    </div>
+                    <div className="end_date">
+                      <span>To </span> :{"       "}
+                      <MyDatePicker
+                        selectsStart={false}
+                        selectsEnd={true}
+                        rangeStart={rangeStart}
+                        rangeEnd={rangeEnd}
+                        setRange={setRangeEnd}
+                        selected={rangeEnd}
+                        minDate={new Date(rangeStart)}
+                        maxDate={new Date()}
+                      />
+                    </div>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      type="submit"
+                      onClick={ApplyDateFilter}>
+                      Apply
+                    </Button>
+                  </div>
+
+                  <LineChart data={inputData} inputFormet={inputFormet} />
+                  <FilterButtons
+                    activeBtn={activeBtn}
+                    ApplyFilterOnInput={ApplyFilterOnInput}
                   />
-                </div>
-                <div className="end_date">
-                  <span>To </span> :{"       "}
-                  <MyDatePicker
-                    selectsStart={false}
-                    selectsEnd={true}
-                    rangeStart={rangeStart}
-                    rangeEnd={rangeEnd}
-                    setRange={setRangeEnd}
-                    selected={rangeEnd}
-                    minDate={new Date(rangeStart)}
-                    maxDate={new Date()}
+                  <MyAreaChart
+                    data={machineLearning}
+                    inputFormet={inputFormet}
+                    name="Deep Learning"
+                    max={dlMax}
+                    value={2}
                   />
-                </div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  onClick={ApplyDateFilter}>
-                  Apply
-                </Button>
-              </div>
+                  <MyAreaChart
+                    data={exponentionData}
+                    inputFormet={inputFormet}
+                    name="Exponential Smoothing"
+                    max={expoMax}
+                    value={3}
+                  />
 
-              <LineChart data={inputData} inputFormet={inputFormet} />
-              <FilterButtons
-                activeBtn={activeBtn}
-                ApplyFilterOnInput={ApplyFilterOnInput}
-              />
-              <MyAreaChart
-                data={machineLearning}
-                inputFormet={inputFormet}
-                name="Deep Learning"
-                max={dlMax}
-                value={2}
-              />
-              <MyAreaChart
-                data={exponentionData}
-                inputFormet={inputFormet}
-                name="Exponential Smoothing"
-                max={expoMax}
-                value={3}
-              />
-
-              <MyAreaChart
-                data={arimaData}
-                inputFormet={inputFormet}
-                name="Arima"
-                max={arimaMax}
-                value={1}
-              />
-            </>
-          )}
-        </div>
-      </div>
+                  <MyAreaChart
+                    data={arimaData}
+                    inputFormet={inputFormet}
+                    name="Arima"
+                    max={arimaMax}
+                    value={1}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

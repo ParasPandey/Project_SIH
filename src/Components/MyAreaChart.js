@@ -49,8 +49,8 @@ const MyAreaChart = ({ data, inputFormet, name, max, value }) => {
             <YAxis
               tickFormatter={currencyFormatter}
               fontSize={12}
-              domain={[(dataMin) => 0, (dataMax) => dataMax * offset]}
-              // domain={[0, max + 5]}
+              // domain={[(dataMin) => 0, (dataMax) => dataMax * offset]}
+              domain={[0, max + value]}
               label={{
                 value: "Price",
                 angle: -90,

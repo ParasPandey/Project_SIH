@@ -36,6 +36,8 @@ import Arima180 from "../File/Arima/arima180.json";
 import Arima365 from "../File/Arima/arima365.json";
 import Arima730 from "../File/Arima/arima730.json";
 
+// esemble
+import Esemble from "../File/ensemble.json";
 export const DashBoard = () => {
   const [inputData, setInputData] = useState([]);
   const [fileData, setFileData] = useState([]);
@@ -51,15 +53,18 @@ export const DashBoard = () => {
   let [expoMax, setExpoMax] = useState(0);
   let [arimaMax, setArimaMax] = useState(0);
 
+  const [esembleData, setEsembleData] = useState([]);
+  // const [fileData, setFileData] = useState([]);
+
   const [rangeEnd, setRangeEnd] = useState();
   const FindMax = (data, update) => {
     let max = 0;
     data.forEach((d) => {
-      if(Number(d.actual) > Number(max)){
-        max=Number(d.actual)
+      if (Number(d.actual) > Number(max)) {
+        max = Number(d.actual);
       }
     });
-    max=Math.ceil(max)
+    max = Math.ceil(max);
     update(max);
   };
   useEffect(() => {
@@ -70,6 +75,7 @@ export const DashBoard = () => {
     FindMax(exponential, setExpoMax);
     FindMax(DLData, setDLMax);
     FindMax(Arima, setArimaMax);
+    setEsembleData(Esemble.slice(1,Esemble.length))
   }, []);
 
   const handleFileUpload = (e) => {
@@ -153,10 +159,10 @@ export const DashBoard = () => {
           FindMax(Arima365, setArimaMax);
         } else if (dataArray[0] === "2") {
           // FindMax(exponential730, setExpoMax);
-          console.log(exponential730[0].max)
-          setExpoMax(Math.floor(exponential730[0].max))
+          console.log(exponential730[0].max);
+          setExpoMax(Math.floor(exponential730[0].max));
           SetMachineLearning(DLData730);
-          SetExponentionData(exponential730.slice(1,exponential730.length));
+          SetExponentionData(exponential730.slice(1, exponential730.length));
           SetArimaData(Arima730);
           FindMax(DLData730, setDLMax);
           FindMax(Arima730, setArimaMax);
@@ -221,7 +227,7 @@ export const DashBoard = () => {
                   />
                 </div>
                 <div className="end_date">
-                  <span>TO </span> :{"       "}
+                  <span>TO </span> :
                   <MyDatePicker
                     selectsStart={false}
                     selectsEnd={true}
@@ -251,7 +257,7 @@ export const DashBoard = () => {
               <MyAreaChart
                 data={machineLearning}
                 inputFormet={inputFormet}
-                name="Deep Learning"
+                name="LSTM"
                 max={dlMax}
                 value={2}
               />
@@ -268,6 +274,14 @@ export const DashBoard = () => {
                 inputFormet={inputFormet}
                 name="Arima"
                 max={arimaMax}
+                value={1}
+              />
+
+              <MyAreaChart
+                data={Esemble.slice(1,Esemble.length)}
+                inputFormet={inputFormet}
+                name="Ensemble"
+                max={Esemble[0].max}
                 value={1}
               />
             </>

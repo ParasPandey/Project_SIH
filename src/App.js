@@ -17,7 +17,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<DashBoard />} />
             <Route exact path="/about" element={<About />} />
-            {/* <Route exact path="/news" element={<News />} /> */}
+            <Route exact path="/news" element={<News />} />
           </Routes>
         </div>
       </Container>

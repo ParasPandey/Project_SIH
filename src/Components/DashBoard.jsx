@@ -97,7 +97,7 @@ export const DashBoard = () => {
   };
   const Predict = async (e) => {
     e.preventDefault();
-    let json = UpdateJson(csvData, DLData);
+    let json = UpdateJson(csvData, Esemble.slice(1, Esemble.length));
     const response = await axios.post("excel/download", { json });
     if (response.data) {
       window.open(`http://localhost:5000/excel/download/${response.data}`);

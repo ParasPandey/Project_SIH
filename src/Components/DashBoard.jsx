@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import "./../CSS/Dashboard.css";
-import { ConvertFileToJson, UpdateJson } from "../Helper/helper";
+import {
+  ConvertFileToJson,
+  ConvertFileToJsonPredict,
+  FillCSVEmptyValues,
+  UpdateJson,
+} from "../Helper/helper";
+import newFile from "../File/newngp.csv";
 import inputFileData from "../File/ngp_close.csv";
 import LineChart from "./LineChart";
 import MyAreaChart from "./MyAreaChart";
@@ -35,6 +41,7 @@ import Arima90 from "../File/Arima/arima90.json";
 import Arima180 from "../File/Arima/arima180.json";
 import Arima365 from "../File/Arima/arima365.json";
 import Arima730 from "../File/Arima/arima730.json";
+import axios from "axios";
 
 // esemble
 import Esemble from "../File/ensemble.json";
@@ -45,6 +52,7 @@ export const DashBoard = () => {
   const [inputFormet, setInputFormet] = useState("YYYY");
   const [activeBtn, setActiveBtn] = useState("Default");
   const [rangeStart, setRangeStart] = useState();
+  const [presentData, setPresentData] = useState();
   const [exponentionData, SetExponentionData] = useState([]);
   const [machineLearning, SetMachineLearning] = useState([]);
   const [arimaData, SetArimaData] = useState([]);
@@ -52,6 +60,7 @@ export const DashBoard = () => {
   let [dlMax, setDLMax] = useState(0);
   let [expoMax, setExpoMax] = useState(0);
   let [arimaMax, setArimaMax] = useState(0);
+  const [isLoding, setIsLoding] = useState(false);
 
   const [esembleData, setEsembleData] = useState([]);
   // const [fileData, setFileData] = useState([]);
@@ -69,26 +78,33 @@ export const DashBoard = () => {
   };
   useEffect(() => {
     ConvertFileToJson(inputFileData, setInputData, setFileData);
+    // fetchPresentData();
     SetExponentionData(exponential);
     SetMachineLearning(DLData);
     SetArimaData(Arima);
     FindMax(exponential, setExpoMax);
     FindMax(DLData, setDLMax);
     FindMax(Arima, setArimaMax);
-    setEsembleData(Esemble.slice(1,Esemble.length))
+    setEsembleData(Esemble.slice(1, Esemble.length));
   }, []);
 
   const handleFileUpload = (e) => {
     if (e.target.files) {
       console.log(e.target.files[0]);
       setInputFile(e.target.files[0]);
-      ConvertFileToJson(e.target.files[0], setCsvData, null);
+      ConvertFileToJsonPredict(e.target.files[0], setCsvData, null);
     }
   };
-  const Predict = (e) => {
+  const Predict = async (e) => {
     e.preventDefault();
     let json = UpdateJson(csvData, DLData);
-    console.log(json);
+    const response = await axios.post("excel/download", { json });
+    if (response.data) {
+      window.open(`http://localhost:5000/excel/download/${response.data}`);
+      window.location.reload();
+    } else {
+      console.log("Some Error Occured");
+    }
   };
 
   const ApplyFilterOnInput = (data) => {
@@ -177,6 +193,12 @@ export const DashBoard = () => {
     // For Natural Gas Price
     let filterdInputArray = inputData.filter((d) => {
       d.Date = d.Date.split("-").reverse().join("-");
+      console.log(
+        new Date(d.Date).getTime(),
+        d.Date,
+        rangeStart,
+        new Date(d.Date).getTime() >= d.Date
+      );
       return (
         new Date(d.Date).getTime() >= new Date(rangeStart).getTime() &&
         new Date(d.Date).getTime() <= new Date(rangeEnd).getTime()
@@ -189,7 +211,7 @@ export const DashBoard = () => {
   return (
     <>
       <header className="header">
-        <h2>Dashboard</h2>
+        <h2 className="mb-4">Futurists</h2>
       </header>
       <div className="searchbar">
         <form onSubmit={Predict}>
@@ -206,15 +228,15 @@ export const DashBoard = () => {
           </Button>
         </form>
       </div>
-      <hr />
+
       <div className="main_dash">
-        <h4>Prediction Chart</h4>
         <div className="default_chart">
+          <h4 className="mt-4">Prediction Chart</h4>
           {inputData?.length > 0 && (
             <>
               <div className="date_picker">
                 <div className="start_date">
-                  <span>FROM </span> :{"       "}
+                  <span>From </span> :{"       "}
                   <MyDatePicker
                     selectsStart={true}
                     selectsEnd={false}
@@ -227,7 +249,7 @@ export const DashBoard = () => {
                   />
                 </div>
                 <div className="end_date">
-                  <span>TO </span> :
+                  <span>To </span> :{"       "}
                   <MyDatePicker
                     selectsStart={false}
                     selectsEnd={true}
@@ -243,8 +265,7 @@ export const DashBoard = () => {
                   variant="contained"
                   color="primary"
                   type="submit"
-                  onClick={ApplyDateFilter}
-                >
+                  onClick={ApplyDateFilter}>
                   Apply
                 </Button>
               </div>
@@ -253,6 +274,13 @@ export const DashBoard = () => {
               <FilterButtons
                 activeBtn={activeBtn}
                 ApplyFilterOnInput={ApplyFilterOnInput}
+              />
+              <MyAreaChart
+                data={Esemble.slice(1, Esemble.length)}
+                inputFormet={inputFormet}
+                name="Ensemble"
+                max={Esemble[0].max}
+                value={1}
               />
               <MyAreaChart
                 data={machineLearning}
@@ -274,14 +302,6 @@ export const DashBoard = () => {
                 inputFormet={inputFormet}
                 name="Arima"
                 max={arimaMax}
-                value={1}
-              />
-
-              <MyAreaChart
-                data={Esemble.slice(1,Esemble.length)}
-                inputFormet={inputFormet}
-                name="Ensemble"
-                max={Esemble[0].max}
                 value={1}
               />
             </>

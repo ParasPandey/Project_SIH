@@ -1,23 +1,27 @@
 @import url("https://fonts.googleapis.com/css2?family=Ibarra+Real+Nova:ital,wght@0,400;1,700&family=Josefin+Sans:ital,wght@1,600&display=swap");
 header {
   text-align: center;
-  font-family: "Josefin Sans", sans-serif;
+  /* font-family: "Josefin Sans", sans-serif; */
+  font-weight: 600;
 }
 .searchbar form {
   display: flex;
-  padding: 10px 20px;
+  /* padding: 10px 20px; */
   justify-content: center;
 }
 .searchbar form label {
+  background-color: white;
   cursor: pointer;
   padding: 5px;
   border-radius: 5px;
-  color: rgb(0, 85, 255);
-  border: 2px solid blue;
-  width: 80%;
+  color: rgb(148, 148, 148);
+  /* border: 2px solid rgb(215, 215, 215); */
+  width: 100%;
+  box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
 }
 .searchbar form button {
   margin-left: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .searchbar form #upload_file {
   opacity: 0;
@@ -25,12 +29,14 @@ header {
   z-index: -1;
 }
 .default_chart .filter_buttons {
-  margin: 15px 10px;
-  text-align: center;
-  border: 2px solid whitesmoke;
-  padding: 5px;
-  border-radius: 2px;
-  box-shadow: 10px 10px 8px #888888;
+  border-radius: 5px;
+  background-color: white;
+  padding: 10px 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .default_chart .filter_buttons button {
   margin: 10px;
@@ -40,18 +46,30 @@ header {
   justify-content: center;
   align-items: center;
   margin: 20px 0;
-  border: 2px solid whitesmoke;
+  /* border: 2px solid whitesmoke; */
   padding: 10px;
-  border-radius: 2px;
-  box-shadow: 10px 10px 8px #888888;
-
+  border-radius: 5px;
+  /* box-shadow: 10px 10px 8px #888888; */
+  /* box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px; */
+  box-shadow: rgb(0 0 0 / 16%) 0px 1px 4px;
+  background-color: white;
 }
 .default_chart .date_picker .start_date,.default_chart .date_picker .end_date {
   display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 0 5px;
 }
-.default_chart .date_picker span{
-  margin: 0 5px;
+.default_chart .date_picker span, .chart-box{
+  /* margin: 0 5px;// */
 }.default_chart .date_picker .react-datepicker-wrapper {
   margin: 0 5px;
+}
+
+.chart-box{
+  border-radius: 5px;
+  background-color: white;
+  padding: 10px 5px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  margin-bottom: 10px;
 }

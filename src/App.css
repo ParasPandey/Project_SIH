@@ -3,20 +3,38 @@
   padding: 0;
   box-sizing: border-box;
 }
+body{
+  margin: 0px !important;
+  font-family: 'Nunito', sans-serif;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
+}
 .app{
   height: 100vh;
   display: flex;
+  padding: 0px;
 }
 .app .sidebar{
+  padding: 0px 5px 0px 0px;
+  box-sizing: border-box;
   height: 100vh;
   width: 250px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
 .app .visualize{
+  background-color: rgb(250 250 250);
   width: calc(100vw - 270px);
   display: flex;
   flex-direction: column;
-  margin: 20px 5px 20px 5px;
+  /* margin: 20px 0px 20px 0px; */
+  padding: 20px 10px;
+  overflow-y: auto;
 }
 .app .visualize hr{
   border-top: 2px solid;
+}
+
+.react-datepicker__input-container input{
+  border: 2px solid #e4e4e4;
+  padding: 5px;
+   border-radius: 5px;
 }

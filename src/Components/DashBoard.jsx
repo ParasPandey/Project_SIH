@@ -25,7 +25,7 @@ import DLData730 from "../File/DL/dl730.json";
 import MyDatePicker from "./MyDatePicker";
 
 // Exponential all files
-import exponential from "../File/eX/es_all.json";
+import exponential from "../File/EX/es_all.json";
 import exponential5 from "../File/EX/ex5.json";
 import exponential30 from "../File/EX/ex30.json";
 import exponential90 from "../File/EX/ex90.json";
@@ -226,15 +226,15 @@ export const DashBoard = () => {
           </Button>
         </form>
       </div>
-      <hr />
+
       <div className="main_dash">
-        <h4>Prediction Chart</h4>
         <div className="default_chart">
+          <h4 className="mt-4">Prediction Chart</h4>
           {inputData?.length > 0 && (
             <>
               <div className="date_picker">
                 <div className="start_date">
-                  <span>FROM </span> :{"       "}
+                  <span>From </span> :{"       "}
                   <MyDatePicker
                     selectsStart={true}
                     selectsEnd={false}
@@ -247,7 +247,7 @@ export const DashBoard = () => {
                   />
                 </div>
                 <div className="end_date">
-                  <span>TO </span> :{"       "}
+                  <span>To </span> :{"       "}
                   <MyDatePicker
                     selectsStart={false}
                     selectsEnd={true}

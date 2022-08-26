@@ -1,7 +1,9 @@
 .sidebar_box {
-  background-color: #2d53da;
-  margin: 20px 5px 20px 5px;
-  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  /* margin: 20px 5px 20px 5px; */
+  /* border-radius: 8px; */
+  height: 100vh;
 }
 .sidebar_box .logo {
   padding: 10px 5px 5px 5px;
@@ -15,43 +17,43 @@
   width: 60px;
 }
 .sidebar_box .sidebar_options ul {
-  padding: 5px;
+  padding: 0px;
   padding-bottom: 0;
 }
 .sidebar_box .sidebar_options ul li {
   list-style: none;
   font-weight: 600;
   cursor: pointer;
-  margin: 10px;
+  /* margin: 10px; */
   padding: 10px;
-  padding-left: 40px;
-  color: white;
+  /* padding-left: 40px; */
+  color: rgb(0, 0, 0);
   font-size: 17px;
 }
 .sidebar_box .sidebar_options ul li.current {
-  background-color: white;
-  border-radius: 5px;
-  color: black;
+  background-color: #303f9f33;
+  border-radius: 0px;
+  color: rgb(0, 0, 0);
 }
 .sidebar_box .sidebar_options ul li:hover {
-  background-color: white;
-  border-radius: 5px;
-  color: black;
+  background-color: #303f9f33;
+  border-radius: 0px !important;
+  color: rgb(0, 0, 0);
 }
 
 .sidebar_box .sidebar_options ul li span {
   margin-left: 10px;
 }
 .sidebar_box .contact_info {
-  margin: 5px;
+  /* margin: 5px; */
   padding-bottom: 10px;
 }
 .sidebar_box .contact_info .information {
-  margin: 0px 15px;
+  /* margin: 0px 15px; */
   padding: 15px;
   color: white;
-  background-color: #3e65f2;
-  border-radius: 5px;
+  background-color: #001f8d;
+  /* border-radius: 5px; */
   font-size: 14px;
   display: flex;
   flex-direction: column;

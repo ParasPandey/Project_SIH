@@ -16,56 +16,64 @@ import { Resizable } from "react-timeseries-charts";
 import moment from "moment";
 import numeral from "numeral";
 
-const MyAreaChart = ({ data, inputFormet, name,offset }) => {
-  data.map((d)=>{
+const MyAreaChart = ({ data, inputFormet, name, offset }) => {
+  data.map((d) => {
     d.actual = Number(d?.actual)?.toFixed(2);
-    d['Confidence Interval'][0] = Number(d['Confidence Interval'][0])?.toFixed(2)
-    d['Confidence Interval'][1] = Number(d['Confidence Interval'][1])?.toFixed(2)
-    return d
-  })
+    d["Confidence Interval"][0] = Number(d["Confidence Interval"][0])?.toFixed(
+      2
+    );
+    d["Confidence Interval"][1] = Number(d["Confidence Interval"][1])?.toFixed(
+      2
+    );
+    return d;
+  });
   const dateFormatter = (item) => moment(item).format(inputFormet);
   const currencyFormatter = (item) => numeral(item).format("$0,0");
   return (
     <>
-      <h4 className="m-3">{name}</h4>
-      <Resizable>
-        <ComposedChart
-          width={500}
-          height={400}
-          data={data}
-          margin={{
-            top: 20,
-            right: 20,
-            bottom: 20,
-            left: 20,
-          }}
-        >
-          <CartesianGrid stroke="#f5f5f5" />
-          <XAxis dataKey="date" tickFormatter={dateFormatter} fontSize={12}>
-            <Label value="date" offset={0} position="bottom" />
-          </XAxis>
-          <YAxis
-            tickFormatter={currencyFormatter}
-            fontSize={12}
-            domain={[dataMin => (0), dataMax => (dataMax * offset)]}
-            // domain={[0, max + 5]} 
-            label={{
-              value: "Price",
-              angle: -90,
-              position: "insideLeft",
-            }}
-          />
-          <Tooltip
-            labelFormatter={function(value) {
-              return `Date: ${value}`;
-            }}
-            
-          />
-          <Legend verticalAlign="top" height={36} />
-          <Area dataKey="Confidence Interval" stroke="#8884d8" fill="#8884d8" />
-          <Line type="linear" dataKey="actual" dot={false} stroke="#ff7300" />
-        </ComposedChart>
-      </Resizable>
+      <div className="chart-box">
+        <h4 className="m-3">{name}</h4>
+        <Resizable>
+          <ComposedChart
+            width={500}
+            height={400}
+            data={data}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
+            }}>
+            <CartesianGrid stroke="#f5f5f5" />
+            <XAxis dataKey="date" tickFormatter={dateFormatter} fontSize={12}>
+              <Label value="date" offset={0} position="bottom" />
+            </XAxis>
+            <YAxis
+              tickFormatter={currencyFormatter}
+              fontSize={12}
+              domain={[(dataMin) => 0, (dataMax) => dataMax * offset]}
+              // domain={[0, max + 5]}
+              label={{
+                value: "Price",
+                angle: -90,
+                position: "insideLeft",
+              }}
+            />
+            <Tooltip
+              labelFormatter={function (value) {
+                return `Date: ${value}`;
+              }}
+            />
+            <Legend verticalAlign="top" height={36} />
+            <Area
+              dataKey="Confidence Interval"
+              stroke="#8884d8"
+              fill="#8884d8"
+            />
+            <Line type="linear" dataKey="actual" dot={false} stroke="#ff7300" />
+          </ComposedChart>
+        </Resizable>
+      </div>
     </>
   );
 };

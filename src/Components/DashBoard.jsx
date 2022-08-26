@@ -43,6 +43,8 @@ import Arima365 from "../File/Arima/arima365.json";
 import Arima730 from "../File/Arima/arima730.json";
 import axios from "axios";
 
+// esemble
+import Esemble from "../File/ensemble.json";
 export const DashBoard = () => {
   const [inputData, setInputData] = useState([]);
   const [fileData, setFileData] = useState([]);
@@ -59,6 +61,9 @@ export const DashBoard = () => {
   let [expoMax, setExpoMax] = useState(0);
   let [arimaMax, setArimaMax] = useState(0);
   const [isLoding, setIsLoding] = useState(false);
+
+  const [esembleData, setEsembleData] = useState([]);
+  // const [fileData, setFileData] = useState([]);
 
   const [rangeEnd, setRangeEnd] = useState();
   const FindMax = (data, update) => {
@@ -80,36 +85,8 @@ export const DashBoard = () => {
     FindMax(exponential, setExpoMax);
     FindMax(DLData, setDLMax);
     FindMax(Arima, setArimaMax);
+    setEsembleData(Esemble.slice(1, Esemble.length));
   }, []);
-
-  // useEffect(() => {
-  //   if (presentData?.data.length > 0) {
-  //     ConvertFileToJson(fileName, setInputData, setFileData);
-  //   }
-  // }, [presentData]);
-
-  // const fetchPresentData = async () => {
-  //   try {
-  //     const data = await axios.get("/getPresentPriceData");
-  //     console.log(data);
-  //     setPresentData(data);
-  //     setIsLoding(false);
-  //   } catch (error) {}
-  // };
-
-  // useEffect(() => {
-  //   if (presentData?.data.length > 0) {
-  //     ConvertFileToJson(presentData, setInputData, setFileData);
-  //   }
-  // }, [presentData]);
-
-  // const fetchPresentData = async () => {
-  //   try {
-  //     const data = await axios.get("/getPresentPriceData");
-  //     console.log(data);
-  //     setPresentData(data);
-  //   } catch (error) {}
-  // };
 
   const handleFileUpload = (e) => {
     if (e.target.files) {
@@ -233,107 +210,104 @@ export const DashBoard = () => {
   };
   return (
     <>
-      {isLoding ? (
-        <>
-          <div className="text-center">
-            <h4 className="mt-5">Please wait your data is loading....</h4>
-          </div>
-        </>
-      ) : (
-        <>
-          <header className="header">
-            <h2 className="mb-4">Futurists</h2>
-          </header>
-          <div className="searchbar">
-            <form onSubmit={Predict}>
-              <label htmlFor="upload_file">Import CSV File</label>
-              <input
-                type="file"
-                accept=".csv,.xlsx,.xls"
-                name="CSV_File"
-                id="upload_file"
-                onChange={handleFileUpload}
+      <header className="header">
+        <h2 className="mb-4">Futurists</h2>
+      </header>
+      <div className="searchbar">
+        <form onSubmit={Predict}>
+          <label htmlFor="upload_file">Import CSV File</label>
+          <input
+            type="file"
+            accept=".csv,.xlsx,.xls"
+            name="CSV_File"
+            id="upload_file"
+            onChange={handleFileUpload}
+          />
+          <Button variant="contained" color="primary" type="submit">
+            Predict
+          </Button>
+        </form>
+      </div>
+
+      <div className="main_dash">
+        <div className="default_chart">
+          <h4 className="mt-4">Prediction Chart</h4>
+          {inputData?.length > 0 && (
+            <>
+              <div className="date_picker">
+                <div className="start_date">
+                  <span>From </span> :{"       "}
+                  <MyDatePicker
+                    selectsStart={true}
+                    selectsEnd={false}
+                    rangeStart={rangeStart}
+                    rangeEnd={rangeEnd}
+                    setRange={setRangeStart}
+                    selected={rangeStart}
+                    minDate={new Date("01-07-1997")}
+                    maxDate={new Date()}
+                  />
+                </div>
+                <div className="end_date">
+                  <span>To </span> :{"       "}
+                  <MyDatePicker
+                    selectsStart={false}
+                    selectsEnd={true}
+                    rangeStart={rangeStart}
+                    rangeEnd={rangeEnd}
+                    setRange={setRangeEnd}
+                    selected={rangeEnd}
+                    minDate={new Date(rangeStart)}
+                    maxDate={new Date()}
+                  />
+                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  onClick={ApplyDateFilter}>
+                  Apply
+                </Button>
+              </div>
+
+              <LineChart data={inputData} inputFormet={inputFormet} />
+              <FilterButtons
+                activeBtn={activeBtn}
+                ApplyFilterOnInput={ApplyFilterOnInput}
               />
-              <Button variant="contained" color="primary" type="submit">
-                Predict
-              </Button>
-            </form>
-          </div>
+              <MyAreaChart
+                data={Esemble.slice(1, Esemble.length)}
+                inputFormet={inputFormet}
+                name="Ensemble"
+                max={Esemble[0].max}
+                value={1}
+              />
+              <MyAreaChart
+                data={machineLearning}
+                inputFormet={inputFormet}
+                name="LSTM"
+                max={dlMax}
+                value={2}
+              />
+              <MyAreaChart
+                data={exponentionData}
+                inputFormet={inputFormet}
+                name="Exponential Smoothing"
+                max={expoMax}
+                value={3}
+              />
 
-          <div className="main_dash">
-            <div className="default_chart">
-              <h4 className="mt-4">Prediction Chart</h4>
-              {inputData?.length > 0 && (
-                <>
-                  <div className="date_picker">
-                    <div className="start_date">
-                      <span>From </span> :{"       "}
-                      <MyDatePicker
-                        selectsStart={true}
-                        selectsEnd={false}
-                        rangeStart={rangeStart}
-                        rangeEnd={rangeEnd}
-                        setRange={setRangeStart}
-                        selected={rangeStart}
-                        minDate={new Date("01-07-1997")}
-                        maxDate={new Date()}
-                      />
-                    </div>
-                    <div className="end_date">
-                      <span>To </span> :{"       "}
-                      <MyDatePicker
-                        selectsStart={false}
-                        selectsEnd={true}
-                        rangeStart={rangeStart}
-                        rangeEnd={rangeEnd}
-                        setRange={setRangeEnd}
-                        selected={rangeEnd}
-                        minDate={new Date(rangeStart)}
-                        maxDate={new Date()}
-                      />
-                    </div>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      type="submit"
-                      onClick={ApplyDateFilter}>
-                      Apply
-                    </Button>
-                  </div>
-
-                  <LineChart data={inputData} inputFormet={inputFormet} />
-                  <FilterButtons
-                    activeBtn={activeBtn}
-                    ApplyFilterOnInput={ApplyFilterOnInput}
-                  />
-                  <MyAreaChart
-                    data={machineLearning}
-                    inputFormet={inputFormet}
-                    name="Deep Learning"
-                    max={dlMax}
-                    value={2}
-                  />
-                  <MyAreaChart
-                    data={exponentionData}
-                    inputFormet={inputFormet}
-                    name="Exponential Smoothing"
-                    max={expoMax}
-                    value={3}
-                  />
-
-                  <MyAreaChart
-                    data={arimaData}
-                    inputFormet={inputFormet}
-                    name="Arima"
-                    max={arimaMax}
-                    value={1}
-                  />
-                </>
-              )}
-            </div>
-          </div>
-        </>
-      )}
+              <MyAreaChart
+                data={arimaData}
+                inputFormet={inputFormet}
+                name="Arima"
+                max={arimaMax}
+                value={1}
+              />
+            </>
+          )}
+        </div>
+      </div>
     </>
   );
 };

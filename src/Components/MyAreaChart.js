@@ -17,8 +17,8 @@ import moment from "moment";
 import numeral from "numeral";
 
 const MyAreaChart = ({ data, inputFormet, name }) => {
+  console.log(data)
   data.map((d)=>{
-    // console.log(d)
     d.actual = Number(d?.actual)?.toFixed(2);
     d['Confidence Interval'][0] = Number(d['Confidence Interval'][0])?.toFixed(2)
     d['Confidence Interval'][1] = Number(d['Confidence Interval'][1])?.toFixed(2)
@@ -48,7 +48,8 @@ const MyAreaChart = ({ data, inputFormet, name }) => {
           <YAxis
             tickFormatter={currencyFormatter}
             fontSize={12}
-            domain={[0, "dataMax +2"]}
+            domain={[dataMin => (0 - Math.abs(dataMin)), dataMax => (dataMax * 2)]} 
+            tick={{ fontSize: 14, width: 250 }}
             label={{
               value: "Price",
               angle: -90,

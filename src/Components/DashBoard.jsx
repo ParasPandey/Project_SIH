@@ -1,33 +1,54 @@
 import React, { useEffect, useState } from "react";
 import Button from "@material-ui/core/Button";
 import "./../CSS/Dashboard.css";
-import { ConvertFileToJson } from "../Helper/helper";
-import file from "../File/daily_csv.csv";
+import {
+  ConvertFileToJson,
+  FillCSVEmptyValues,
+  UpdateJson,
+} from "../Helper/helper";
 import newFile from "../File/newngp.csv";
 import inputFileData from "../File/ngp_close.csv";
 import LineChart from "./LineChart";
 
 import "react-datepicker/dist/react-datepicker.css";
+// Dl all data read
+import DLData from "../File/DL/dlall.json";
+import DLData5 from "../File/DL/dl5.json";
+import DLData30 from "../File/DL/dl30.json";
+import DLData90 from "../File/DL/dl90.json";
+import DLData180 from "../File/DL/dl180.json";
+import DLData365 from "../File/DL/dl365.json";
+import DLData730 from "../File/DL/dl730.json";
 import MyDatePicker from "./MyDatePicker";
-import mlData from "../File/ml";
-import exponential from "../File/exponential.json";
+import exponential from "../File/Exponential.json";
+import Arima from "../File/ARIMA.json";
 import MyAreaChart from "./MyAreaChart";
 import FilterButtons from "./FilterButtons";
 import axios from "axios";
 
 export const DashBoard = () => {
-  let [inputData, setInputData] = useState([]);
-  let [fileData, setFileData] = useState([]);
-  let [inputfile, setInputFile] = useState();
-  let [inputFormet, setInputFormet] = useState("YYYY");
-  let [activeBtn, setActiveBtn] = useState("Default");
+  const [inputData, setInputData] = useState([]);
+  const [fileData, setFileData] = useState([]);
+  const [inputfile, setInputFile] = useState();
+  const [inputFormet, setInputFormet] = useState("YYYY");
+  const [activeBtn, setActiveBtn] = useState("Default");
   const [rangeStart, setRangeStart] = useState();
   const [presentData, setPresentData] = useState();
+  const [exponentionData, SetExponentionData] = useState([]);
+  const [machineLearning, SetMachineLearning] = useState([]);
+  const [arimaData, SetArimaData] = useState([]);
+  let [csvData, setCsvData] = useState([]);
 
   const [rangeEnd, setRangeEnd] = useState();
+  // console.log(exponentionData);
+  // console.log(machineLearning);
+  // console.log(arimaData);
   useEffect(() => {
     // ConvertFileToJson(inputFileData, setInputData, setFileData);
     fetchPresentData();
+    SetExponentionData(exponential);
+    SetMachineLearning(DLData);
+    SetArimaData(Arima);
   }, []);
 
   useEffect(() => {
@@ -48,52 +69,118 @@ export const DashBoard = () => {
     if (e.target.files) {
       console.log(e.target.files[0]);
       setInputFile(e.target.files[0]);
+      ConvertFileToJson(e.target.files[0], setCsvData, null);
     }
   };
   const Predict = (e) => {
     e.preventDefault();
-    ConvertFileToJson(newFile, setInputData, setFileData);
+    let json = UpdateJson(csvData, DLData);
+    console.log(json);
   };
 
   const ApplyFilterOnInput = (data) => {
     if (data === " ") {
       setActiveBtn("Default");
+      SetExponentionData(exponential);
+      SetMachineLearning(DLData);
       setInputData(fileData);
+      SetArimaData(Arima);
     } else {
       const dataArray = data.split("-");
       if (dataArray[1] === "D") {
         setInputData(
           fileData.slice(fileData.length - dataArray[0], fileData.length)
         );
+        SetExponentionData(exponential.slice(0, dataArray[0]));
+
+        SetArimaData(Arima.slice(0, dataArray[0]));
         setInputFormet("DD-MM-YYYY");
+        SetMachineLearning(DLData5);
         setActiveBtn("5 Days");
       } else if (dataArray[1] === "M") {
         setInputData(
           fileData.slice(fileData.length - 30 * dataArray[0], fileData.length)
         );
+        SetExponentionData(exponential.slice(0, 30 * dataArray[0]));
+        // SetMachineLearning(DLData.slice(0, 30 * dataArray[0]));
+        SetArimaData(Arima.slice(0, 30 * dataArray[0]));
         setInputFormet("DD-MM-YYYY");
         setActiveBtn(`${dataArray[0]} Month`);
+        if (dataArray[0] === "1") {
+          console.log(DLData30);
+          SetMachineLearning(DLData30);
+        } else if (dataArray[0] === "3") {
+          console.log(DLData90);
+          SetMachineLearning(DLData90);
+        } else if (dataArray[0] === "6") {
+          console.log(DLData180);
+          SetMachineLearning(DLData180);
+        }
       } else if (dataArray[1] === "Y") {
         setInputData(
           fileData.slice(fileData.length - 365 * dataArray[0], fileData.length)
         );
+        console.log(dataArray[0]);
+        SetExponentionData(exponential.slice(0, 365 * dataArray[0]));
+
+        SetArimaData(Arima.slice(0, 365 * dataArray[0]));
         setInputFormet("MM-YYYY");
         setActiveBtn(`${dataArray[0]} Year`);
+        if (dataArray[0] === "1") {
+          SetMachineLearning(DLData365);
+        } else if (dataArray[0] === "2") {
+          SetMachineLearning(DLData730);
+        }
       }
     }
   };
 
   const ApplyDateFilter = () => {
     setActiveBtn(null);
-    let filterdArray = inputData.filter((d) => {
+
+    // For Natural Gas Price
+    let filterdInputArray = inputData.filter((d) => {
       d.Date = d.Date.split("-").reverse().join("-");
       return (
-        new Date(d.Data).getTime() >= new Date(rangeStart).getTime() &&
-        new Date(d.Data).getTime() <= new Date(rangeEnd).getTime()
+        new Date(d.Date).getTime() >= new Date(rangeStart).getTime() &&
+        new Date(d.Date).getTime() <= new Date(rangeEnd).getTime()
       );
     });
-    console.log(filterdArray);
-    setInputData(filterdArray);
+    console.log(filterdInputArray);
+    setInputData(filterdInputArray);
+
+    // For Exponention Prediction
+    let filterdExponentionArray = exponentionData.filter((d) => {
+      console.log(d);
+      // d.Date = d.Date.split("-").reverse().join("-");
+      return (
+        new Date(d.date).getTime() >= new Date(rangeStart).getTime() &&
+        new Date(d.date).getTime() <= new Date(rangeEnd).getTime()
+      );
+    });
+    SetExponentionData(filterdExponentionArray);
+
+    // For ML Prediction
+    let filterdMlArray = DLData.filter((d) => {
+      // console.log(d)
+      // d.Date = d.date.split("-").reverse().join("-");
+      return (
+        new Date(d.date).getTime() >= new Date(rangeStart).getTime() &&
+        new Date(d.date).getTime() <= new Date(rangeEnd).getTime()
+      );
+    });
+    SetMachineLearning(filterdMlArray);
+
+    // For Arima Prediction
+    let filterdArimaArray = arimaData.filter((d) => {
+      // console.log(d)
+      // d.Date = d.date.split("-").reverse().join("-");
+      return (
+        new Date(d.date).getTime() >= new Date(rangeStart).getTime() &&
+        new Date(d.date).getTime() <= new Date(rangeEnd).getTime()
+      );
+    });
+    SetArimaData(filterdArimaArray);
     setInputFormet("DD-MM-YYYY");
   };
 
@@ -104,7 +191,7 @@ export const DashBoard = () => {
       </header>
       <div className="searchbar">
         <form onSubmit={Predict}>
-          <label htmlFor="upload_file">Export CSV File</label>
+          <label htmlFor="upload_file">Import CSV File</label>
           <input
             type="file"
             accept=".csv,.xlsx,.xls"
@@ -163,84 +250,37 @@ export const DashBoard = () => {
                 ApplyFilterOnInput={ApplyFilterOnInput}
               />
               <LineChart data={inputData} inputFormet={inputFormet} />
-
               <MyAreaChart
-                data={exponential}
+                data={machineLearning}
+                inputFormet={inputFormet}
+                name="Deep Learning"
+              />
+              <MyAreaChart
+                data={exponentionData}
                 inputFormet={inputFormet}
                 name="Exponential Smoothing"
               />
+
               <MyAreaChart
-                data={mlData}
+                data={arimaData}
                 inputFormet={inputFormet}
-                name="Machine Learning"
+                name="Arima"
               />
-
-              {/* <div className="filter_buttons">
-                <button
-                  type="button"
-                  className={`btn btn${
-                    activeBtn === "5 Days" ? "" : "-outline"
-                  }-primary`}
-                  onClick={() => ApplyFilterOnInput("5-D")}
-                >
-                  5 Days
-                </button>
-                <button
-                  type="button"
-                  className={`btn btn${
-                    activeBtn === "1 Month" ? "" : "-outline"
-                  }-primary`}
-                  onClick={() => ApplyFilterOnInput("1-M")}
-                >
-                  1 Month
-                </button>
-                <button
-                  type="button"
-                  className={`btn btn${
-                    activeBtn === "3 Month" ? "" : "-outline"
-                  }-primary`}
-                  onClick={() => ApplyFilterOnInput("3-M")}
-                >
-                  3 Month
-                </button>
-                <button
-                  type="button"
-                  className={`btn btn${
-                    activeBtn === "6 Month" ? "" : "-outline"
-                  }-primary`}
-                  onClick={() => ApplyFilterOnInput("6-M")}
-                >
-                  6 Month
-                </button>
-
-                <button
-                  type="button"
-                  className={`btn btn${
-                    activeBtn === "1 Year" ? "" : "-outline"
-                  }-primary`}
-                  onClick={() => ApplyFilterOnInput("1-Y")}
-                >
-                  1 Year
-                </button>
-                <button
-                  type="button"
-                  className={`btn btn${
-                    activeBtn === "5 Year" ? "" : "-outline"
-                  }-primary`}
-                  onClick={() => ApplyFilterOnInput("5-Y")}
-                >
-                  5 Year
-                </button>
-                <button
-                  type="button"
-                  className={`btn btn${
-                    activeBtn === "Default" ? "" : "-outline"
-                  }-primary`}
-                  onClick={() => ApplyFilterOnInput(" ")}
-                >
-                  All
-                </button>
-              </div> */}
+              <h4>Collectione of Three</h4>
+              {/* <LineChart
+                width={730}
+                height={250}
+                data={data}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="pv" stroke="#8884d8" />
+                <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+              </LineChart> */}
             </>
           )}
         </div>
